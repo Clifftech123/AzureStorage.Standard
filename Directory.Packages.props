@@ -1,0 +1,18 @@
+<Project>
+  <ItemGroup>
+    <PackageVersion Include="Azure.Storage.Blobs" Version="12.26.0" />
+
+    <!-- Azure file storage -->
+    <PackageVersion Include="Azure.Storage.Files.Shares" Version="12.26.0" />
+
+    <!-- Azure queue storage -->
+    <PackageVersion Include="Azure.Storage.Queues" Version="12.26.0" />
+
+    <!-- Azure Table storage -->
+    <PackageVersion Include="Azure.Data.Tables" Version="12.26.0" />
+
+    <!-- Azure Identity -->
+    <PackageVersion Include="Azure.Identity" Version="1.17.0" />
+
+  </ItemGroup>
+</Project>

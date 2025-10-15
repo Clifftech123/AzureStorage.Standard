@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+   <TargetFramework>netstandard2.0 , netstandard2.1 ; 1;net70;net80;net90</TargetFramework>
+   <AssemblyName>AzureStorage.Standard.Blobs</AssemblyName>
+   <RootNamespace>AzureStorage.Standard.Blobs</RootNamespace>
+   <Description>A library for managing Azure Blob Storage resources.</Description>
+   <PackageTags> Azure; Blob; Storage; Azure Blob; Azure Storage ; Azure fileShare; Azure file storage;Azure queue; Azure Table; Azure Identity ; Azure ;Azure cloud ; Azure Storage Account ; .Net Core ; .NET </PackageTags>
+   <GenerateDocumentationFile>true</GenerateDocumentationFile>
+   <Authors>Isaiah Clifford</Authors>
+   <Copyright>Copyright © Isaiah Clifford 2023</Copyright>
+   <PackageId>AzureStorage.Standard.Blobs</PackageId>
+   <PackageVersion>1.0.0</PackageVersion>
+   <IncludeSymbols>true</IncludeSymbols>
+   <IncludeSource>true</IncludeSource>
+   <RepositoryUrl>https://github.com/IsaiahClifford/AzureStorage.Standard</RepositoryUrl>
+   <PackageUrl>https://www.nuget.org/packages/AzureStorage.Standard.Blobs</PackageUrl>
+   <LangVersion>latest</LangVersion>
+   <SignAssembly>True</SignAssembly>
+   <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+  
+   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+      <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+   </PropertyGroup>
+
+   <!--  Reference  the  Azure.Storage.Blobs  package  from the Directory.Packages.props  -->
+   <PackageReference Include="Azure.Storage.Blobs"  />
+
+  <ItemGroup>
+      <ProjectReference Include="..\AzureStorage.Standard\AzureStorage.Standard.Core" />
+   </ItemGroup>
+
+</Project>
