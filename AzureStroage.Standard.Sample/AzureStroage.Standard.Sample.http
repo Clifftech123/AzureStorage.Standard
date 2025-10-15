@@ -1,0 +1,6 @@
+@AzureStroage.Standard.Sample_HostAddress = http://localhost:5215
+
+GET {{AzureStroage.Standard.Sample_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
