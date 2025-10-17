@@ -1,5 +1,7 @@
 
 
+using System;
+
 namespace AzureStorage.Standard.Core.Domain.Models {
     /// <summary>
     /// Base class for Azure Table entities

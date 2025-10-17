@@ -1,11 +1,15 @@
 
 
+using System;
+using AzureStorage.Standard.Core.Domain.Abstractions;
+using AzureStorage.Standard.Core.Domain.Models;
+
 namespace AzureStorage.Standard.Core.Application
 {
     /// <summary>
     /// Factory for creating Azure Storage service clients (Blob, Queue, Table, and File Share)
     /// </summary>
-    public class AzureStorageFactory : IStorageClientFactory
+    public class AzureStorageFactory : IStorageFactory
     {
         #region Fields
 

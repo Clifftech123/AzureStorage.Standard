@@ -1,5 +1,7 @@
 
 
+using System;
+
 namespace AzureStorage.Standard.Core.Domain.Models {
     /// <summary>
     /// Permissions for Blob SAS tokens

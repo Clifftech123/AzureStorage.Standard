@@ -1,14 +1,20 @@
 <Project>
+  <PropertyGroup>
+    <!-- Enable Central Package Management for all projects -->
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+
   <ItemGroup>
+    <!-- Azure Blob Storage -->
     <PackageVersion Include="Azure.Storage.Blobs" Version="12.26.0" />
 
-    <!-- Azure file storage -->
+    <!-- Azure File Storage -->
     <PackageVersion Include="Azure.Storage.Files.Shares" Version="12.26.0" />
 
-    <!-- Azure queue storage -->
+    <!-- Azure Queue Storage -->
     <PackageVersion Include="Azure.Storage.Queues" Version="12.26.0" />
 
-    <!-- Azure Table storage -->
+    <!-- Azure Table Storage -->
     <PackageVersion Include="Azure.Data.Tables" Version="12.26.0" />
 
     <!-- Azure Identity -->

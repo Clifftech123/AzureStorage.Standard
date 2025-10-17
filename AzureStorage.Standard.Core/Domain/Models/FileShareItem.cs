@@ -1,5 +1,8 @@
 
 
+using System;
+using System.Collections.Generic;
+
 namespace AzureStorage.Standard.Core.Domain.Models
 {/// <summary>
     /// Represents an Azure File Share item (file or directory)

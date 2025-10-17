@@ -4,4 +4,10 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+
+   <!-- Project References -->
+  <ItemGroup>
+    <ProjectReference Include="..\AzureStorage.Standard.Core\AzureStorage.Standard.Core.csproj" />
+  </ItemGroup>
+
 </Project>

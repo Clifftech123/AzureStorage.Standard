@@ -6,21 +6,14 @@
     <Nullable>enable</Nullable>
     <OutputType>Exe</OutputType>
     <IsPackable>false</IsPackable>
-
-    <!-- To enable Microsoft.Testing.Platform, uncomment the following line. -->
-    <!-- <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner> -->
-    <!-- Note: to use Microsoft.Testing.Platform correctly with dotnet test: -->
-    <!-- 1. You must add dotnet.config specifying the test runner to be Microsoft.Testing.Platform -->
-    <!-- 2. You must use .NET 10 SDK or later -->
-    <!-- For more information, see https://aka.ms/dotnet-test/mtp and https://xunit.net/docs/getting-started/v3/microsoft-testing-platform -->
-    <!-- To enable code coverage with Microsoft.Testing.Platform, add a package reference to Microsoft.Testing.Extensions.CodeCoverage -->
-    <!-- https://learn.microsoft.comdotnet/core/testing/microsoft-testing-platform-extensions-code-coverage -->
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
-    <PackageReference Include="xunit.v3" Version="3.0.0" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.3" />
+    <!-- Package versions are managed in Directory.Packages.props -->
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,6 +22,14 @@
 
   <ItemGroup>
     <Using Include="Xunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AzureStorage.Standard.Core\AzureStorage.Standard.Core.csproj" />
+    <ProjectReference Include="..\AzureStorage.Standard.Blobs\AzureStorage.Standard.Blobs.csproj" />
+    <ProjectReference Include="..\AzureStorage.Standard.Queues\AzureStorage.Standard.Queues.csproj" />
+    <ProjectReference Include="..\AzureStorage.Standard.Tables\AzureStorage.Standard.Tables.csproj" />
+    <ProjectReference Include="..\AzureStorage.Standard.Files\AzureStorage.Standard.Files.csproj" />
   </ItemGroup>
 
 </Project>
