@@ -9,7 +9,13 @@ using AzureStorage.Standard.Core.Domain.Models;
 
 namespace AzureStorage.Standard.Blobs
 {
-	public class BlobClient : IBlobClient {
+	public class AzureBlobClient : IBlobClient {
+		private readonly StorageOptions _options;
+
+		public AzureBlobClient(StorageOptions options)
+		{
+			_options = options ?? throw new ArgumentNullException(nameof(options));
+		}
 		public Task<bool> BlobExistsAsync(string containerName, string blobName, CancellationToken cancellationToken = default) {
 			throw new NotImplementedException();
 		}

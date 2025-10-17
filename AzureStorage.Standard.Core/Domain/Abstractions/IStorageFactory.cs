@@ -1,4 +1,8 @@
 
+using AzureSt.Storage.Standard.Queues;
+using AzureStorage.Standard.Blobs;
+using AzureStorage.Standard.Files;
+
 namespace AzureStorage.Standard.Core.Domain.Abstractions
 {
     public interface IStorageFactory
