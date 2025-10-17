@@ -9,7 +9,7 @@
     <PackageVersion Include="Azure.Storage.Blobs" Version="12.26.0" />
 
     <!-- Azure File Storage -->
-    <PackageVersion Include="Azure.Storage.Files.Shares" Version="12.26.0" />
+   <PackageVersion Include="Azure.Storage.Files.Shares" Version="12.24.0" />
 
     <!-- Azure Queue Storage -->
     <PackageVersion Include="Azure.Storage.Queues" Version="12.26.0" />
