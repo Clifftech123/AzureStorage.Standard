@@ -46,10 +46,12 @@ namespace AzureStorage.Standard.Core
         /// Creates a new instance of AzureStorageException with full details
         /// </summary>
         public AzureStorageException(string message, string errorCode, int? statusCode, Exception innerException)
-            : base(message, innerException)
-        {
+            : base(message, innerException) {
             ErrorCode = errorCode;
             StatusCode = statusCode;
+        
         }
+        
+       
     }
 }

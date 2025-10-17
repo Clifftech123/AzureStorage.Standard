@@ -236,7 +236,7 @@ namespace AzureStorage.Standard.Blobs
         /// <param name="blobNames">Collection of blob names to delete</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Number of blobs successfully deleted</returns>
-        Task<int> DeleteBlobsAsync(string containerName, IEnumerable<string> blobNames, CancellationToken cancellationToken = default);
+        Task<string> DeleteBlobsAsync(string containerName, IEnumerable<string> blobNames, CancellationToken cancellationToken = default);
 
         #endregion
 
