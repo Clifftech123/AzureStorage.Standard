@@ -1,0 +1,35 @@
+<Project>
+  <PropertyGroup>
+    <!-- Enable Central Package Management for all projects -->
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Azure Blob Storage -->
+    <PackageVersion Include="Azure.Storage.Blobs" Version="12.26.0" />
+
+    <!-- Azure File Storage -->
+   <PackageVersion Include="Azure.Storage.Files.Shares" Version="12.24.0" />
+
+    <!-- Azure Queue Storage -->
+ <PackageVersion Include="Azure.Storage.Queues" Version="12.24.0" />
+
+    <!-- Azure Table Storage -->
+    <PackageVersion Include="Azure.Data.Tables" Version="12.26.0" />
+
+    <!-- Azure Identity -->
+    <PackageVersion Include="Azure.Identity" Version="1.17.0" />
+
+    <!-- Polly for retry policies -->
+    <PackageVersion Include="Polly" Version="8.5.0" />
+
+    <!-- Web / OpenAPI -->
+    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0-rc.1.25451.107" />
+
+    <!-- Test packages -->
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageVersion Include="xunit" Version="2.9.2" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="2.8.2" />
+
+  </ItemGroup>
+</Project>

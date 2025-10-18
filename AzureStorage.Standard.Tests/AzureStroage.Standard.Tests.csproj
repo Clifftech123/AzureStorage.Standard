@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <OutputType>Exe</OutputType>
+    <IsPackable>false</IsPackable>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Package versions are managed in Directory.Packages.props -->
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AzureStorage.Standard.Core\AzureStorage.Standard.Core.csproj" />
+    <ProjectReference Include="..\AzureStorage.Standard.Blobs\AzureStorage.Standard.Blobs.csproj" />
+    <ProjectReference Include="..\AzureStorage.Standard.Queues\AzureStorage.Standard.Queues.csproj" />
+    <ProjectReference Include="..\AzureStorage.Standard.Tables\AzureStorage.Standard.Tables.csproj" />
+    <ProjectReference Include="..\AzureStorage.Standard.Files\AzureStorage.Standard.Files.csproj" />
+  </ItemGroup>
+
+</Project>
