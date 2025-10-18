@@ -29,6 +29,7 @@
   <!-- Package References from Central Package Management -->
   <ItemGroup>
     <PackageReference Include="Azure.Storage.Blobs" />
+    <PackageReference Include="Polly" />
   </ItemGroup>
 
   <!-- Project References -->

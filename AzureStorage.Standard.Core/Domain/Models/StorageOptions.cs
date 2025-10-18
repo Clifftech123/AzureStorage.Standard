@@ -40,6 +40,13 @@ namespace AzureStorage.Standard.Core.Domain.Models
         /// </summary>
         public string SasToken { get; set; }
 
+		/// <summary>
+		/// Retry policy options for automatic handling of transient failures.
+		/// If not specified, default retry policy will be used (3 retries with exponential backoff).
+		/// Set to RetryOptions.None to disable automatic retries.
+		/// </summary>
+		public RetryOptions RetryOptions { get; set; } = RetryOptions.Default;
+
         #endregion
 
         #region Public Methods

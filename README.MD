@@ -105,9 +105,261 @@ services.AddSingleton<StorageOptions>(sp =>
 services.AddSingleton<IStorageClientFactory, AzureStorageFactory>();
 ```
 
-##  Features
+##  Blob Storage
+
+The Blob Storage client provides a simple, powerful API for managing files and unstructured data in Azure.
+
+### Features
+
+-  **Automatic Retries** - Built-in retry logic for transient failures (configurable)
+-  **Batch Operations** - Upload/delete multiple files with partial success tracking
+-  **Container Management** - Create, delete, and check container existence
+-  **Blob Operations** - Upload, download, copy, move, and delete blobs
+-  **Metadata & Properties** - Get and set custom metadata and blob properties
+-  **SAS Token Generation** - Create secure, time-limited access URLs
+-  **Storage Tiers** - Set blob access tiers (Hot, Cool, Archive)
+-  **Snapshots** - Create and manage blob snapshots
+
+### Basic Blob Operations
+
+```csharp
+using AzureStorage.Standard.Blobs;
+
+// Create blob client
+var blobClient = factory.CreateBlobClient();
+
+// Create a container
+await blobClient.CreateContainerIfNotExistsAsync("my-container");
+
+// Upload a file
+using var fileStream = File.OpenRead("photo.jpg");
+await blobClient.UploadBlobAsync(
+    containerName: "my-container",
+    blobName: "photos/photo.jpg",
+    content: fileStream,
+    contentType: "image/jpeg");
+
+// Download a file
+var stream = await blobClient.DownloadBlobAsync("my-container", "photos/photo.jpg");
+await using var outputFile = File.Create("downloaded-photo.jpg");
+await stream.CopyToAsync(outputFile);
+
+// Delete a blob
+await blobClient.DeleteBlobAsync("my-container", "photos/photo.jpg");
+```
+
+### Batch Operations with Partial Success Tracking
+
+```csharp
+// Upload multiple files
+var files = new Dictionary<string, string>
+{
+    ["document1.pdf"] = @"C:\files\document1.pdf",
+    ["document2.pdf"] = @"C:\files\document2.pdf",
+    ["report.xlsx"] = @"C:\files\report.xlsx"
+};
+
+try
+{
+    // Returns comma-separated list of successfully uploaded files
+    var uploaded = await blobClient.UploadBlobsAsync("my-container", files);
+    Console.WriteLine($"Successfully uploaded: {uploaded}");
+}
+catch (AzureStorageException ex)
+{
+    // Exception message includes partial success info
+    // Example: "Failed to upload all blobs. Successfully uploaded: document1.pdf, document2.pdf."
+    Console.WriteLine(ex.Message);
+}
+
+// Delete multiple blobs
+var blobsToDelete = new[] { "file1.txt", "file2.txt", "file3.txt" };
+var deleted = await blobClient.DeleteBlobsAsync("my-container", blobsToDelete);
+Console.WriteLine($"Deleted: {deleted}"); // Returns "file1.txt, file2.txt, file3.txt"
+```
+
+### Automatic Retry Configuration
+
+Retries are enabled by default with sensible settings, but you can customize them:
+
+```csharp
+// Option 1: Use default retry policy (recommended)
+var options = StorageOptions.CreateFromConnectionString(connectionString);
+// Defaults: 3 retries, exponential backoff, 1-30 second delays
+
+// Option 2: Disable retries
+var options = StorageOptions.CreateFromConnectionString(connectionString);
+options.RetryOptions = RetryOptions.None;
+
+// Option 3: Custom retry configuration
+var options = StorageOptions.CreateFromConnectionString(connectionString);
+options.RetryOptions = new RetryOptions
+{
+    MaxRetryAttempts = 5,
+    InitialDelay = TimeSpan.FromMilliseconds(500),
+    MaxDelay = TimeSpan.FromSeconds(15)
+};
+
+// Option 4: Aggressive retries for critical operations
+var options = StorageOptions.CreateFromConnectionString(connectionString);
+options.RetryOptions = RetryOptions.Aggressive; // 5 retries, faster backoff
+```
+
+**What gets retried automatically:**
+- HTTP 408 (Request Timeout)
+- HTTP 500 (Internal Server Error)
+- HTTP 502 (Bad Gateway)
+- HTTP 503 (Service Unavailable)
+- HTTP 504 (Gateway Timeout)
+- HTTP 429 (Too Many Requests - throttling)
+- Network errors (connection failures, socket errors)
+- Azure "ServerBusy" errors
+
+### Container Management
+
+```csharp
+// List all containers
+var containers = await blobClient.ListContainersAsync();
+foreach (var container in containers)
+{
+    Console.WriteLine(container);
+}
+
+// Check if container exists
+bool exists = await blobClient.ContainerExistsAsync("my-container");
+
+// Get container properties
+var properties = await blobClient.GetContainerPropertiesAsync("my-container");
+
+// Set container metadata
+var metadata = new Dictionary<string, string>
+{
+    ["Department"] = "Sales",
+    ["Project"] = "Q4-2024"
+};
+await blobClient.SetContainerMetadataAsync("my-container", metadata);
+
+// Delete container
+await blobClient.DeleteContainerAsync("my-container");
+```
+
+### Advanced Blob Operations
+
+```csharp
+// List blobs with prefix filter
+var blobs = await blobClient.ListBlobsAsync("my-container", prefix: "photos/");
+foreach (var blob in blobs)
+{
+    Console.WriteLine($"{blob.Name} - {blob.Size} bytes");
+}
+
+// Copy blob
+await blobClient.CopyBlobAsync(
+    sourceContainer: "source-container",
+    sourceBlobName: "file.txt",
+    destinationContainer: "backup-container",
+    destinationBlobName: "file-backup.txt");
+
+// Move blob (copy + delete)
+await blobClient.MoveBlobAsync(
+    sourceContainer: "temp-container",
+    sourceBlobName: "upload.txt",
+    destinationContainer: "final-container",
+    destinationBlobName: "upload.txt");
+
+// Rename blob within same container
+await blobClient.RenameBlobAsync("my-container", "old-name.txt", "new-name.txt");
+
+// Create snapshot
+var snapshotId = await blobClient.CreateBlobSnapshotAsync("my-container", "important.txt");
+Console.WriteLine($"Snapshot created: {snapshotId}");
+
+// List blob snapshots
+var snapshots = await blobClient.ListBlobSnapshotsAsync("my-container", "important.txt");
+```
+
+### Blob Metadata and Properties
+
+```csharp
+// Set blob metadata
+var metadata = new Dictionary<string, string>
+{
+    ["Author"] = "John Doe",
+    ["Category"] = "Reports",
+    ["Year"] = "2024"
+};
+await blobClient.SetBlobMetadataAsync("my-container", "report.pdf", metadata);
+
+// Get blob metadata
+var blobMetadata = await blobClient.GetBlobMetadataAsync("my-container", "report.pdf");
+Console.WriteLine($"Author: {blobMetadata["Author"]}");
+
+// Get blob properties
+var blobInfo = await blobClient.GetBlobPropertiesAsync("my-container", "report.pdf");
+Console.WriteLine($"Size: {blobInfo.Size} bytes");
+Console.WriteLine($"Content-Type: {blobInfo.ContentType}");
+Console.WriteLine($"Last Modified: {blobInfo.LastModified}");
+
+// Set content type
+await blobClient.SetBlobContentTypeAsync("my-container", "data.json", "application/json");
+
+// Set access tier (Hot, Cool, Archive)
+await blobClient.SetBlobAccessTierAsync("my-container", "old-file.txt", "Archive");
+```
+
+### SAS Token Generation
+
+```csharp
+// Generate SAS token for blob (read-only, expires in 1 hour)
+var sasToken = await blobClient.GenerateBlobSasTokenAsync(
+    containerName: "my-container",
+    blobName: "document.pdf",
+    expiresIn: TimeSpan.FromHours(1),
+    permissions: BlobSasPermissions.Read);
+
+// Generate complete SAS URL
+var sasUrl = await blobClient.GenerateBlobSasUrlAsync(
+    containerName: "my-container",
+    blobName: "document.pdf",
+    expiresIn: TimeSpan.FromHours(1),
+    permissions: BlobSasPermissions.Read);
+Console.WriteLine($"Share this URL: {sasUrl}");
+
+// Generate SAS token with write permissions
+var writeSasToken = await blobClient.GenerateBlobSasTokenAsync(
+    containerName: "uploads",
+    blobName: "new-file.txt",
+    expiresIn: TimeSpan.FromMinutes(15),
+    permissions: BlobSasPermissions.Read | BlobSasPermissions.Write);
+
+// Generate container SAS token (list all blobs)
+var containerSasToken = await blobClient.GenerateContainerSasTokenAsync(
+    containerName: "my-container",
+    expiresIn: TimeSpan.FromDays(1),
+    permissions: BlobSasPermissions.Read | BlobSasPermissions.List);
+```
+
+### Error Handling
+
+```csharp
+try
+{
+    await blobClient.UploadBlobAsync("my-container", "file.txt", stream);
+}
+catch (AzureStorageException ex)
+{
+    // All Azure Storage errors are wrapped in AzureStorageException
+    Console.WriteLine($"Error: {ex.Message}");
+    Console.WriteLine($"Error Code: {ex.ErrorCode}");
+    Console.WriteLine($"HTTP Status: {ex.StatusCode}");
+}
+```
+
+##  Library Features
 
 -  **Clean, intuitive API** - Easy to learn and use
+-  **Automatic retry logic** - Transparent handling of transient failures
+-  **Batch operations** - Upload/delete multiple files with progress tracking
 -  **Multiple authentication methods** - Connection string, account key, or SAS token
 -  **Factory pattern** - Centralized client creation
 -  **Testable design** - Interface-based for easy mocking

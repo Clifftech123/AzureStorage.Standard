@@ -173,10 +173,11 @@ namespace AzureStorage.Standard.Blobs
         /// <param name="files">Dictionary of blob names and file paths</param>
         /// <param name="overwrite">Whether to overwrite if blobs exist</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        Task UploadBlobsAsync(
-            string containerName, 
-            IDictionary<string, string> files, 
-            bool overwrite = true, 
+        /// <returns>A comma-separated list of successfully uploaded blob names</returns>
+        Task<string> UploadBlobsAsync(
+            string containerName,
+            IDictionary<string, string> files,
+            bool overwrite = true,
             CancellationToken cancellationToken = default);
 
         #endregion
