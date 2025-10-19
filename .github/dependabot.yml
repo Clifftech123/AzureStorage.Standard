@@ -1,0 +1,37 @@
+version: 2
+updates:
+  # Keep NuGet packages updated
+  - package-ecosystem: "nuget"
+    directory: "/"
+    schedule:
+      interval: "weekly"  # Check weekly (not daily - less noise)
+      day: "monday"
+      time: "09:00"
+    # Group related packages together in one PR
+    groups:
+      # Azure SDK packages
+      azure:
+        patterns:
+          - "Azure.*"
+      # Testing packages
+      testing:
+        patterns:
+          - "xunit"
+          - "xunit.*"
+          - "Moq"
+          - "FluentAssertions"
+          - "Microsoft.NET.Test.Sdk"
+      # Build tools
+      build-tools:
+        patterns:
+          - "Microsoft.SourceLink.*"
+          - "MinVer"
+    # Limit open PRs (avoid spam)
+    open-pull-requests-limit: 5
+
+  # Keep GitHub Actions updated
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"  # Actions don't change often
+    open-pull-requests-limit: 3

@@ -12,7 +12,7 @@
     <!-- Package Metadata -->
     <PackageId>AzureStorage.Standard.Files</PackageId>
     <Title>Azure File Share Storage - Simplified .NET Client</Title>
-    <Version>1.0.0</Version>
+    <!-- Version is automatically determined by MinVer from git tags -->
     <Authors>Isaiah Clifford</Authors>
     <Company>Clifftech</Company>
     <Copyright>Copyright © Isaiah Clifford 2025</Copyright>
@@ -77,6 +77,7 @@ Initial release v1.0.0:
   <ItemGroup>
   <PackageReference Include="Azure.Storage.Files.Shares" />
     <PackageReference Include="Polly" />
+    <PackageReference Include="MinVer" PrivateAssets="All" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
   </ItemGroup>
 

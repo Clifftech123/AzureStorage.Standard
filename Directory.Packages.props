@@ -26,6 +26,9 @@
     <!-- Source Link for debugging -->
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0" />
 
+    <!-- Automatic versioning from git tags -->
+    <PackageVersion Include="MinVer" Version="6.0.0" />
+
     <!-- Web / OpenAPI -->
     <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0-rc.1.25451.107" />
 

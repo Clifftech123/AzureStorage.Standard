@@ -11,8 +11,7 @@
 
     <!-- Package Identity -->
     <PackageId>AzureStorage.Standard.Blobs</PackageId>
-    <Version>1.0.0</Version>
-    <PackageVersion>1.0.0</PackageVersion>
+    <!-- Version is automatically determined by MinVer from git tags -->
 
     <!-- Package Metadata for NuGet -->
     <Title>Azure Blob Storage - Simplified .NET Client</Title>
@@ -94,6 +93,7 @@ Initial release v1.0.0:
   <ItemGroup>
    <PackageReference Include="Azure.Storage.Blobs" />
     <PackageReference Include="Polly" />
+    <PackageReference Include="MinVer" PrivateAssets="All" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
   </ItemGroup>
 

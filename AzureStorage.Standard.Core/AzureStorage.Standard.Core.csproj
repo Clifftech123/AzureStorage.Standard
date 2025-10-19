@@ -11,8 +11,7 @@
 
     <!-- Package Identity -->
     <PackageId>AzureStorage.Standard.Core</PackageId>
-    <Version>1.0.0</Version>
-    <PackageVersion>1.0.0</PackageVersion>
+    <!-- Version is automatically determined by MinVer from git tags -->
 
     <!-- Package Metadata for NuGet -->
     <Title>Azure Storage Core - Shared Models and Abstractions</Title>
@@ -80,6 +79,7 @@ Initial release v1.0.0:
 
   <!-- Package References -->
   <ItemGroup>
+    <PackageReference Include="MinVer" PrivateAssets="All" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
   </ItemGroup>
 
