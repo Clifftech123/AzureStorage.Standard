@@ -62,11 +62,16 @@ Initial release v1.0.0:
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <Deterministic>true</Deterministic>
     <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
+
+    <!-- Suppress NuGet warning about no dependencies (this is a core library with types only) -->
+    <!-- Suppress XML documentation warnings (CS1591: missing XML comment, CS1574: cref not found) -->
+    <NoWarn>$(NoWarn);NU5128;NU5017;CS1591;CS1574</NoWarn>
   </PropertyGroup>
 
   <!-- Release Configuration -->
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <!-- Only generate package in CI, not local builds -->
+    <GeneratePackageOnBuild Condition="'$(CI)' == 'true'">true</GeneratePackageOnBuild>
     <Optimize>true</Optimize>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
