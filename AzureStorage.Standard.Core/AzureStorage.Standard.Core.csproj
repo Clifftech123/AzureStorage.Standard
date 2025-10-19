@@ -72,8 +72,9 @@ Initial release v1.0.0:
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <!-- Only generate package in CI, not local builds -->
     <GeneratePackageOnBuild Condition="'$(CI)' == 'true'">true</GeneratePackageOnBuild>
-    <!-- Suppress NuGet pack warnings -->
+    <!-- Suppress NuGet pack warnings and skip package analysis -->
     <NoWarn>$(NoWarn);NU5128;NU5017</NoWarn>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
     <Optimize>true</Optimize>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
