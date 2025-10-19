@@ -1,7 +1,86 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <!-- Target Frameworks - Modern .NET only -->
+    <TargetFrameworks>netstandard2.1;net8.0;net9.0</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
+
+    <!-- Assembly Information -->
+    <AssemblyName>AzureStorage.Standard.Core</AssemblyName>
+    <RootNamespace>AzureStorage.Standard.Core</RootNamespace>
+
+    <!-- Package Identity -->
+    <PackageId>AzureStorage.Standard.Core</PackageId>
+    <Version>1.0.0</Version>
+    <PackageVersion>1.0.0</PackageVersion>
+
+    <!-- Package Metadata for NuGet -->
+    <Title>Azure Storage Core - Shared Models and Abstractions</Title>
+    <Product>AzureStorage.Standard.Core</Product>
+    <Description>Core package containing shared models, interfaces, and abstractions for the AzureStorage.Standard library suite. This package provides common types used across Azure Blob Storage, Queue Storage, Table Storage, and File Share clients. Includes storage configuration models (StorageOptions), retry policies (RetryOptions), exception types (AzureStorageException), and shared domain models. This package is automatically installed as a dependency when you install any of the AzureStorage.Standard client packages (Blobs, Queues, Tables, Files). You typically don't need to install this package directly.</Description>
+    <PackageTags>azure;storage;azure-storage;core;abstractions;models;interfaces;shared;azure-sdk;dotnet;netstandard</PackageTags>
+    <Summary>Shared models and interfaces for AzureStorage.Standard library - automatically included with client packages</Summary>
+
+    <!-- Authors and Copyright -->
+    <Authors>Isaiah Clifford</Authors>
+    <Company>Isaiah Clifford</Company>
+    <Copyright>Copyright © Isaiah Clifford 2024-2025</Copyright>
+
+    <!-- Repository and Project URLs -->
+    <RepositoryUrl>https://github.com/Clifftech123/AzureStroage.Standard</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>https://github.com/Clifftech123/AzureStroage.Standard</PackageProjectUrl>
+
+    <!-- Documentation -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+    <!-- License -->
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+
+    <!-- Package Release Notes -->
+    <PackageReleaseNotes>
+Initial release v1.0.0:
+- StorageOptions configuration model
+- RetryOptions for resilience configuration
+- AzureStorageException for unified error handling
+- Shared domain models for all storage types
+- Interface abstractions for dependency injection
+- .NET Standard 2.0 compatibility
+    </PackageReleaseNotes>
+
+    <!-- Symbols and Source -->
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <IncludeSource>false</IncludeSource>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+
+    <!-- Source Link for debugging -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <DebugType>embedded</DebugType>
+
+    <!-- Package Quality -->
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Deterministic>true</Deterministic>
+    <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
   </PropertyGroup>
+
+  <!-- Release Configuration -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Optimize>true</Optimize>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <!-- Debug Configuration -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <Optimize>false</Optimize>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <!-- Package References -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
+  </ItemGroup>
 
 </Project>

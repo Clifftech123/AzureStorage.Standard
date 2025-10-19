@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <!-- Multi-framework targeting for broad compatibility -->
-    <TargetFrameworks>netstandard2.0;netstandard2.1;net7.0;net8.0;net9.0</TargetFrameworks>
+    <!-- Target Frameworks - Modern .NET only -->
+    <TargetFrameworks>netstandard2.1;net8.0;net9.0</TargetFrameworks>
 
     <!-- Assembly Information -->
     <AssemblyName>AzureStorage.Standard.Files</AssemblyName>
@@ -75,14 +75,17 @@ Initial release v1.0.0:
 
   <!-- Package References from Central Package Management -->
   <ItemGroup>
-    <PackageReference Include="Azure.Storage.Files.Shares" />
+  <PackageReference Include="Azure.Storage.Files.Shares" />
     <PackageReference Include="Polly" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
   </ItemGroup>
 
-  <!-- Project References -->
+  <!-- Project References - Used during development -->
   <ItemGroup>
-    <ProjectReference Include="..\AzureStorage.Standard.Core\AzureStorage.Standard.Core.csproj" />
+    <ProjectReference Include="..\AzureStorage.Standard.Core\AzureStorage.Standard.Core.csproj">
+      <!-- This ensures Core is included as a NuGet package dependency when packing -->
+      <PrivateAssets>None</PrivateAssets>
+    </ProjectReference>
   </ItemGroup>
 
 </Project>
