@@ -48,8 +48,7 @@ Initial release v1.0.0:
     </PackageReleaseNotes>
 
     <!-- Symbols and Source -->
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <IncludeSymbols>false</IncludeSymbols>
     <IncludeSource>false</IncludeSource>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
 
