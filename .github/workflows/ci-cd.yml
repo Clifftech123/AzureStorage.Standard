@@ -35,10 +35,6 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
 
-    - name: Display calculated version
-      run: dotnet build --configuration ${{ env.CONFIGURATION }} --no-restore -t:MinVer -v:m | grep "MinVer:"
-      continue-on-error: true
-
     - name: Build solution
       run: dotnet build --configuration ${{ env.CONFIGURATION }} --no-restore
 
