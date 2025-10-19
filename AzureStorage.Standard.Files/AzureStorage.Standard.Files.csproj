@@ -1,32 +1,83 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <!-- Use TargetFrameworks (plural) for multiple targets -->
+    <!-- Multi-framework targeting for broad compatibility -->
     <TargetFrameworks>netstandard2.0;netstandard2.1;net7.0;net8.0;net9.0</TargetFrameworks>
-    <AssemblyName>AzureStorage.Standard.Blobs</AssemblyName>
-    <RootNamespace>AzureStorage.Standard.Blobs</RootNamespace>
-    <Description>A library for managing Azure Blob Storage resources.</Description>
-    <PackageTags>Azure;Blob;Storage;Azure-Blob;Azure-Storage;Azure-FileShare;Azure-File-Storage;Azure-Queue;Azure-Table;Azure-Identity;Azure-Cloud;Azure-Storage-Account;.NET-Core;.NET</PackageTags>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <Authors>Isaiah Clifford</Authors>
-    <Copyright>Copyright © Isaiah Clifford 2023</Copyright>
-    <PackageId>AzureStorage.Standard.Blobs</PackageId>
-    <PackageVersion>1.0.0</PackageVersion>
-    <IncludeSymbols>true</IncludeSymbols>
-    <IncludeSource>true</IncludeSource>
-    <RepositoryUrl>https://github.com/Clifftech123/AzureStroage.Standard</RepositoryUrl>
-    <PackageProjectUrl>https://www.nuget.org/packages/AzureStorage.Standard.Blobs</PackageProjectUrl>
+
+    <!-- Assembly Information -->
+    <AssemblyName>AzureStorage.Standard.Files</AssemblyName>
+    <RootNamespace>AzureStorage.Standard.Files</RootNamespace>
     <LangVersion>latest</LangVersion>
+
+    <!-- Package Metadata -->
+    <PackageId>AzureStorage.Standard.Files</PackageId>
+    <Title>Azure File Share Storage - Simplified .NET Client</Title>
+    <Version>1.0.0</Version>
+    <Authors>Isaiah Clifford</Authors>
+    <Company>Clifftech</Company>
+    <Copyright>Copyright © Isaiah Clifford 2025</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <!-- Enable Central Package Management -->
+
+    <!-- Detailed Description for NuGet SEO (up to 4000 characters) -->
+    <Description>A simplified, modern .NET client library for Azure File Share Storage (Azure Files) with built-in retry policies, comprehensive error handling, and intuitive APIs. This library provides an easy-to-use wrapper around Azure.Storage.Files.Shares SDK with full support for file share management, directory operations, file upload/download, streaming, metadata management, and SAS token generation. Features automatic retry policies using Polly for enhanced reliability. Perfect for lift-and-shift scenarios, shared configuration storage, log aggregation, and applications requiring SMB-compatible cloud file storage. Supports nested directory structures, file copying, existence checks, and properties management. Compatible with .NET Standard 2.0+, .NET 7, 8, and 9. Ideal for migrating on-premises file shares to Azure, building cloud-native applications with shared file access, and enabling distributed teams to access common files securely.</Description>
+
+    <!-- Short summary for package listings -->
+    <Summary>Simplified Azure File Share client with resilient file operations, directory management, streaming support, and comprehensive error handling for .NET applications.</Summary>
+
+    <!-- SEO-optimized tags for discoverability -->
+    <PackageTags>azure;files;storage;azure-storage;azure-files;file-share;azure-file-share;cloud-storage;microsoft-azure;azure-sdk;dotnet;netstandard;smb;file-storage;upload;download;stream;directory;share;azure-cloud;lift-and-shift;polly;retry-policy;resilience</PackageTags>
+
+    <!-- Documentation -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+
+    <!-- Release Notes -->
+    <PackageReleaseNotes>
+Initial release v1.0.0:
+- File share management (Create, Delete, List, Exists)
+- Directory operations (Create, Delete, List, Navigate)
+- File upload from local path or stream
+- File download to local path or stream
+- File copy within storage account
+- File and directory metadata management
+- File properties retrieval (size, last modified, content type)
+- File existence checks
+- SAS token generation for secure access
+- Streaming support for large files
+- Built-in retry policies using Polly for resilience
+- Nested directory structure support
+- SMB protocol compatibility
+- Comprehensive error handling with AzureStorageException
+- Async/await pattern throughout
+- Extensive XML documentation with examples
+- Multi-framework support (.NET Standard 2.0+, .NET 7-9)
+    </PackageReleaseNotes>
+
+    <!-- Repository and Project URLs -->
+    <RepositoryUrl>https://github.com/Clifftech123/AzureStroage.Standard</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>https://github.com/Clifftech123/AzureStroage.Standard</PackageProjectUrl>
+
+    <!-- Source Link for debugging support -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+
+    <!-- Central Package Management -->
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
-  
-   
 
-    <!-- Package References from Central Package Management -->
+  <!-- Include README in package -->
   <ItemGroup>
-   <PackageReference Include="Azure.Storage.Files.Shares" />
+    <None Include="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <!-- Package References from Central Package Management -->
+  <ItemGroup>
+    <PackageReference Include="Azure.Storage.Files.Shares" />
+    <PackageReference Include="Polly" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
   </ItemGroup>
 
   <!-- Project References -->

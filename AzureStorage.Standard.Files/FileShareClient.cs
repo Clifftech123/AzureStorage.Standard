@@ -9,6 +9,7 @@ using Azure.Storage.Files.Shares;
 using Azure.Storage.Files.Shares.Models;
 using AzureStorage.Standard.Core;
 using AzureStorage.Standard.Core.Domain.Models;
+using AzureStorage.Standard.Files.Internal;
 
 namespace AzureStorage.Standard.Files
 {
@@ -114,7 +115,7 @@ namespace AzureStorage.Standard.Files
             try
             {
                 var shareClient = _shareServiceClient.GetShareClient(shareName);
-                var response = await shareClient.CreateIfNotExistsAsync(cancellationToken: cancellationToken);
+                var response = await RetryPolicyHelper.ExecuteWithRetryAsync(_options.RetryOptions, () => shareClient.CreateIfNotExistsAsync(cancellationToken: cancellationToken));
                 return response != null;
             }
             catch (RequestFailedException ex)
@@ -144,7 +145,7 @@ namespace AzureStorage.Standard.Files
             try
             {
                 var shareClient = _shareServiceClient.GetShareClient(shareName);
-                var response = await shareClient.DeleteIfExistsAsync(cancellationToken: cancellationToken);
+                var response = await RetryPolicyHelper.ExecuteWithRetryAsync(_options.RetryOptions, () => shareClient.DeleteIfExistsAsync(cancellationToken: cancellationToken));
                 return response.Value;
             }
             catch (RequestFailedException ex)
@@ -171,7 +172,7 @@ namespace AzureStorage.Standard.Files
             try
             {
                 var shareClient = _shareServiceClient.GetShareClient(shareName);
-                return await shareClient.ExistsAsync(cancellationToken);
+                return await RetryPolicyHelper.ExecuteWithRetryAsync(_options.RetryOptions, () => shareClient.ExistsAsync(cancellationToken));
             }
             catch (RequestFailedException ex)
             {
@@ -205,7 +206,7 @@ namespace AzureStorage.Standard.Files
             try
             {
                 var shareClient = _shareServiceClient.GetShareClient(shareName);
-                await shareClient.SetQuotaAsync(quotaInGB, cancellationToken);
+                await RetryPolicyHelper.ExecuteWithRetryAsync(_options.RetryOptions, () => shareClient.SetQuotaAsync(quotaInGB, cancellationToken));
             }
             catch (RequestFailedException ex)
             {
@@ -242,7 +243,7 @@ namespace AzureStorage.Standard.Files
             {
                 var shareClient = _shareServiceClient.GetShareClient(shareName);
                 var directoryClient = shareClient.GetDirectoryClient(directoryPath);
-                var response = await directoryClient.CreateIfNotExistsAsync(cancellationToken: cancellationToken);
+                var response = await RetryPolicyHelper.ExecuteWithRetryAsync(_options.RetryOptions, () => directoryClient.CreateIfNotExistsAsync(cancellationToken: cancellationToken));
                 return response != null;
             }
             catch (RequestFailedException ex)
@@ -275,7 +276,7 @@ namespace AzureStorage.Standard.Files
             {
                 var shareClient = _shareServiceClient.GetShareClient(shareName);
                 var directoryClient = shareClient.GetDirectoryClient(directoryPath);
-                var response = await directoryClient.DeleteIfExistsAsync(cancellationToken: cancellationToken);
+                var response = await RetryPolicyHelper.ExecuteWithRetryAsync(_options.RetryOptions, () => directoryClient.DeleteIfExistsAsync(cancellationToken: cancellationToken));
                 return response.Value;
             }
             catch (RequestFailedException ex)
@@ -305,7 +306,7 @@ namespace AzureStorage.Standard.Files
             {
                 var shareClient = _shareServiceClient.GetShareClient(shareName);
                 var directoryClient = shareClient.GetDirectoryClient(directoryPath);
-                return await directoryClient.ExistsAsync(cancellationToken);
+                return await RetryPolicyHelper.ExecuteWithRetryAsync(_options.RetryOptions, () => directoryClient.ExistsAsync(cancellationToken));
             }
             catch (RequestFailedException ex)
             {
@@ -395,9 +396,18 @@ namespace AzureStorage.Standard.Files
                 // Create parent directories if needed
                 await CreateParentDirectoriesAsync(shareClient, filePath, cancellationToken);
 
-                // TODO: Implement overwrite parameter - currently always overwrites
-                await fileClient.CreateAsync(content.Length, cancellationToken: cancellationToken);
-                await fileClient.UploadAsync(content, cancellationToken: cancellationToken);
+                // Check if file exists when overwrite is false
+                if (!overwrite)
+                {
+                    bool exists = await RetryPolicyHelper.ExecuteWithRetryAsync(_options.RetryOptions, () => fileClient.ExistsAsync(cancellationToken));
+                    if (exists)
+                    {
+                        throw new AzureStorageException($"File '{filePath}' already exists in share '{shareName}' and overwrite is set to false.", "FileAlreadyExists", 409, null);
+                    }
+                }
+
+                await RetryPolicyHelper.ExecuteWithRetryAsync(_options.RetryOptions, () => fileClient.CreateAsync(content.Length, cancellationToken: cancellationToken));
+                await RetryPolicyHelper.ExecuteWithRetryAsync(_options.RetryOptions, () => fileClient.UploadAsync(content, cancellationToken: cancellationToken));
             }
             catch (RequestFailedException ex)
             {
@@ -457,7 +467,7 @@ namespace AzureStorage.Standard.Files
                 var shareClient = _shareServiceClient.GetShareClient(shareName);
                 var fileClient = GetFileClient(shareClient, filePath);
 
-                var response = await fileClient.DownloadAsync(cancellationToken: cancellationToken);
+                var response = await RetryPolicyHelper.ExecuteWithRetryAsync(_options.RetryOptions, () => fileClient.DownloadAsync(cancellationToken: cancellationToken));
                 var memoryStream = new MemoryStream();
                 await response.Value.Content.CopyToAsync(memoryStream, cancellationToken);
                 memoryStream.Position = 0;
@@ -521,7 +531,7 @@ namespace AzureStorage.Standard.Files
                 var shareClient = _shareServiceClient.GetShareClient(shareName);
                 var fileClient = GetFileClient(shareClient, filePath);
 
-                var response = await fileClient.DeleteIfExistsAsync(cancellationToken: cancellationToken);
+                var response = await RetryPolicyHelper.ExecuteWithRetryAsync(_options.RetryOptions, () => fileClient.DeleteIfExistsAsync(cancellationToken: cancellationToken));
                 return response.Value;
             }
             catch (RequestFailedException ex)
@@ -552,7 +562,7 @@ namespace AzureStorage.Standard.Files
                 var shareClient = _shareServiceClient.GetShareClient(shareName);
                 var fileClient = GetFileClient(shareClient, filePath);
 
-                return await fileClient.ExistsAsync(cancellationToken);
+                return await RetryPolicyHelper.ExecuteWithRetryAsync(_options.RetryOptions, () => fileClient.ExistsAsync(cancellationToken));
             }
             catch (RequestFailedException ex)
             {
