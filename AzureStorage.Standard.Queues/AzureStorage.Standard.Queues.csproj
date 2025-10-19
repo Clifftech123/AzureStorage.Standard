@@ -1,32 +1,83 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-    <!-- Use TargetFrameworks (plural) for multiple targets -->
+  <PropertyGroup>
+    <!-- Multi-framework targeting for broad compatibility -->
     <TargetFrameworks>netstandard2.0;netstandard2.1;net7.0;net8.0;net9.0</TargetFrameworks>
-    <AssemblyName>AzureStorage.Standard.Blobs</AssemblyName>
-    <RootNamespace>AzureStorage.Standard.Blobs</RootNamespace>
-    <Description>A library for managing Azure Blob Storage resources.</Description>
-    <PackageTags>Azure;Blob;Storage;Azure-Blob;Azure-Storage;Azure-FileShare;Azure-File-Storage;Azure-Queue;Azure-Table;Azure-Identity;Azure-Cloud;Azure-Storage-Account;.NET-Core;.NET</PackageTags>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <Authors>Isaiah Clifford</Authors>
-    <Copyright>Copyright © Isaiah Clifford 2023</Copyright>
-    <PackageId>AzureStorage.Standard.Blobs</PackageId>
-    <PackageVersion>1.0.0</PackageVersion>
-    <IncludeSymbols>true</IncludeSymbols>
-    <IncludeSource>true</IncludeSource>
-    <RepositoryUrl>https://github.com/Clifftech123/AzureStroage.Standard</RepositoryUrl>
-    <PackageProjectUrl>https://www.nuget.org/packages/AzureStorage.Standard.Blobs</PackageProjectUrl>
+
+    <!-- Assembly Information -->
+    <AssemblyName>AzureStorage.Standard.Queues</AssemblyName>
+    <RootNamespace>AzureStorage.Standard.Queues</RootNamespace>
     <LangVersion>latest</LangVersion>
+
+    <!-- Package Metadata -->
+    <PackageId>AzureStorage.Standard.Queues</PackageId>
+    <Title>Azure Queue Storage - Simplified .NET Client</Title>
+    <Version>1.0.0</Version>
+    <Authors>Isaiah Clifford</Authors>
+    <Company>Clifftech</Company>
+    <Copyright>Copyright © Isaiah Clifford 2025</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <!-- Enable Central Package Management -->
+
+    <!-- Detailed Description for NuGet SEO (up to 4000 characters) -->
+    <Description>A simplified, modern .NET client library for Azure Queue Storage with comprehensive message operations and intuitive APIs. This library provides an easy-to-use wrapper around Azure.Storage.Queues SDK with support for sending, receiving, peeking, updating, and deleting messages. Features include text and binary message support, configurable visibility timeouts, message TTL management, batch operations, and reliable message processing patterns. Perfect for building asynchronous, decoupled applications with background job processing, task queuing, and inter-service communication. Includes built-in error handling, poison message detection, and dequeue count tracking. Compatible with .NET Standard 2.0+, .NET 7, 8, and 9. Ideal for microservices architectures, distributed systems, and cloud-native applications requiring reliable message queuing.</Description>
+
+    <!-- Short summary for package listings -->
+    <Summary>Simplified Azure Queue Storage client with message operations, visibility timeout management, batch support, and comprehensive error handling for .NET applications.</Summary>
+
+    <!-- SEO-optimized tags for discoverability -->
+    <PackageTags>azure;queue;storage;azure-storage;azure-queue-storage;queue-storage;message-queue;azure-queues;cloud-storage;microsoft-azure;azure-sdk;dotnet;netstandard;messaging;async;background-jobs;task-queue;message-processing;azure-cloud;distributed-systems;microservices;decoupled-architecture</PackageTags>
+
+    <!-- Documentation -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+
+    <!-- Release Notes -->
+    <PackageReleaseNotes>
+Initial release v1.0.0:
+- Send text and binary messages (up to 64 KB)
+- Receive messages with configurable visibility timeout
+- Peek messages without removal from queue
+- Update message content and visibility timeout
+- Delete messages using pop receipts
+- Batch send operations for efficiency
+- Queue management (Create, Delete, List, Exists)
+- Message count retrieval
+- Clear all messages operation
+- Comprehensive error handling with AzureStorageException
+- Dequeue count tracking for poison message detection
+- Message TTL configuration (up to 7 days)
+- Async/await pattern throughout
+- Extensive XML documentation with examples
+- Multi-framework support (.NET Standard 2.0+, .NET 7-9)
+    </PackageReleaseNotes>
+
+    <!-- Repository and Project URLs -->
+    <RepositoryUrl>https://github.com/Clifftech123/AzureStroage.Standard</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>https://github.com/Clifftech123/AzureStroage.Standard</PackageProjectUrl>
+
+    <!-- Source Link for debugging support -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+
+    <!-- Central Package Management -->
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
-  
-   <ItemGroup>
-     <PackageVersion Include="Azure.Storage.Queues"/>
+
+  <!-- Include README in package -->
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
-    
-   <!-- Project References -->
+
+  <!-- Package References from Central Package Management -->
+  <ItemGroup>
+    <PackageReference Include="Azure.Storage.Queues" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
+  </ItemGroup>
+
+  <!-- Project References -->
   <ItemGroup>
     <ProjectReference Include="..\AzureStorage.Standard.Core\AzureStorage.Standard.Core.csproj" />
   </ItemGroup>

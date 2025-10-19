@@ -1,40 +1,115 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <!-- Use TargetFrameworks (plural) for multiple targets -->
-    <TargetFrameworks>netstandard2.0;netstandard2.1;net7.0;net8.0;net9.0</TargetFrameworks>
+    <!-- Target Frameworks -->
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net8.0;net9.0</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
+
+    <!-- Assembly Information -->
     <AssemblyName>AzureStorage.Standard.Blobs</AssemblyName>
     <RootNamespace>AzureStorage.Standard.Blobs</RootNamespace>
-    <Description>A library for managing Azure Blob Storage resources.</Description>
-    <PackageTags>Azure;Blob;Storage;Azure-Blob;Azure-Storage;Azure-FileShare;Azure-File-Storage;Azure-Queue;Azure-Table;Azure-Identity;Azure-Cloud;Azure-Storage-Account;.NET-Core;.NET</PackageTags>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <Authors>Isaiah Clifford</Authors>
-    <Copyright>Copyright © Isaiah Clifford 2023</Copyright>
+
+    <!-- Package Identity -->
     <PackageId>AzureStorage.Standard.Blobs</PackageId>
+    <Version>1.0.0</Version>
     <PackageVersion>1.0.0</PackageVersion>
-    <IncludeSymbols>true</IncludeSymbols>
-    <IncludeSource>true</IncludeSource>
+
+    <!-- Package Metadata for NuGet -->
+    <Title>Azure Blob Storage - Simplified .NET Client</Title>
+    <Product>AzureStorage.Standard.Blobs</Product>
+    <Description>A simplified, modern .NET client library for Azure Blob Storage. Provides an easy-to-use wrapper around Azure.Storage.Blobs SDK with built-in retry policies, comprehensive error handling, and intuitive APIs for blob and container management. Supports blob upload/download, streaming, metadata management, and advanced features like access tiers and lease operations. Compatible with .NET Standard 2.0+, .NET 7, 8, and 9.</Description>
+    <PackageTags>azure;blob;storage;azure-storage;azure-blob-storage;blob-storage;cloud-storage;microsoft-azure;azure-sdk;dotnet;netstandard;container;upload;download;stream;blob-client;azure-cloud;object-storage</PackageTags>
+    <Summary>Simplified Azure Blob Storage client for .NET with built-in resilience and modern APIs</Summary>
+
+    <!-- Authors and Copyright -->
+    <Authors>Isaiah Clifford</Authors>
+    <Company>Isaiah Clifford</Company>
+    <Copyright>Copyright © Isaiah Clifford 2024-2025</Copyright>
+
+    <!-- Repository and Project URLs -->
     <RepositoryUrl>https://github.com/Clifftech123/AzureStroage.Standard</RepositoryUrl>
-    <PackageProjectUrl>https://www.nuget.org/packages/AzureStorage.Standard.Blobs</PackageProjectUrl>
-    <LangVersion>latest</LangVersion>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>https://github.com/Clifftech123/AzureStroage.Standard</PackageProjectUrl>
+
+    <!-- Documentation -->
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+    <!-- License -->
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+
+    <!-- Package Release Notes -->
+    <PackageReleaseNotes>
+Initial release v1.0.0:
+- Comprehensive blob operations (upload, download, delete, copy)
+- Container management with full CRUD support
+- Streaming support for large files
+- Metadata and properties management
+- Access tier management (Hot, Cool, Archive)
+- Blob lease operations
+- SAS token generation
+- Built-in retry policies using Polly
+- Async/await support throughout
+- Extensive XML documentation
+- Multi-framework support (.NET Standard 2.0+, .NET 7-9)
+    </PackageReleaseNotes>
+
+    <!-- Package Icon (uncomment when you add an icon) -->
+    <!-- <PackageIcon>icon.png</PackageIcon> -->
+
+    <!-- Symbols and Source -->
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <IncludeSource>false</IncludeSource>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+
+    <!-- Source Link for debugging -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <DebugType>embedded</DebugType>
+
     <!-- Enable Central Package Management -->
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+
+    <!-- Package Quality -->
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Deterministic>true</Deterministic>
+    <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
   </PropertyGroup>
-  
+
+  <!-- Release Configuration -->
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Optimize>true</Optimize>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <!-- Debug Configuration -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <Optimize>false</Optimize>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
   <!-- Package References from Central Package Management -->
   <ItemGroup>
-    <PackageReference Include="Azure.Storage.Blobs" />
+   <PackageReference Include="Azure.Storage.Blobs" />
     <PackageReference Include="Polly" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
   </ItemGroup>
 
   <!-- Project References -->
   <ItemGroup>
     <ProjectReference Include="..\AzureStorage.Standard.Core\AzureStorage.Standard.Core.csproj" />
   </ItemGroup>
+
+  <!-- Include README in package (uncomment when README.md is created) -->
+  <!-- <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup> -->
+
+  <!-- Include Icon in package (uncomment when icon is added) -->
+  <!-- <ItemGroup>
+    <None Include="icon.png" Pack="true" PackagePath="\" />
+  </ItemGroup> -->
 
 </Project>

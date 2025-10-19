@@ -6,22 +6,25 @@
 
   <ItemGroup>
     <!-- Azure Blob Storage -->
-    <PackageVersion Include="Azure.Storage.Blobs" Version="12.26.0" />
+   <PackageVersion Include="Azure.Storage.Blobs" Version="12.26.0" />
 
     <!-- Azure File Storage -->
    <PackageVersion Include="Azure.Storage.Files.Shares" Version="12.24.0" />
 
     <!-- Azure Queue Storage -->
- <PackageVersion Include="Azure.Storage.Queues" Version="12.24.0" />
+  <PackageVersion Include="Azure.Storage.Queues" Version="12.24.0" />
 
     <!-- Azure Table Storage -->
-    <PackageVersion Include="Azure.Data.Tables" Version="12.26.0" />
+   <PackageVersion Include="Azure.Data.Tables" Version="12.11.0" />
 
     <!-- Azure Identity -->
     <PackageVersion Include="Azure.Identity" Version="1.17.0" />
 
     <!-- Polly for retry policies -->
     <PackageVersion Include="Polly" Version="8.5.0" />
+
+    <!-- Source Link for debugging -->
+    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0" />
 
     <!-- Web / OpenAPI -->
     <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0-rc.1.25451.107" />

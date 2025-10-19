@@ -1,7 +1,81 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <!-- Multi-framework targeting for broad compatibility -->
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net7.0;net8.0;net9.0</TargetFrameworks>
+
+    <!-- Assembly Information -->
+    <AssemblyName>AzureStorage.Standard.Tables</AssemblyName>
+    <RootNamespace>AzureStorage.Standard.Tables</RootNamespace>
+    <LangVersion>latest</LangVersion>
+
+    <!-- Package Metadata -->
+    <PackageId>AzureStorage.Standard.Tables</PackageId>
+    <Title>Azure Table Storage - Simplified .NET Client</Title>
+    <Version>1.0.0</Version>
+    <Authors>Isaiah Clifford</Authors>
+    <Company>Clifftech</Company>
+    <Copyright>Copyright © Isaiah Clifford 2025</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+
+    <!-- Detailed Description for NuGet SEO (up to 4000 characters) -->
+    <Description>A simplified, modern .NET client library for Azure Table Storage with built-in error handling and intuitive APIs. This library provides an easy-to-use wrapper around Azure.Data.Tables SDK with comprehensive entity operations, flexible querying with OData filters, batch transactions, and type-safe generic support. Perfect for NoSQL data storage scenarios requiring schema-less data with partition and row key indexing. Supports full CRUD operations, partition-based queries, optimistic concurrency with ETags, and atomic batch transactions. Compatible with .NET Standard 2.0+, .NET 7, 8, and 9. Ideal for cloud-native applications, microservices, and distributed systems requiring fast, scalable NoSQL storage with Azure integration.</Description>
+
+    <!-- Short summary for package listings -->
+    <Summary>Simplified Azure Table Storage client with type-safe entities, OData queries, batch operations, and comprehensive error handling for .NET applications.</Summary>
+
+    <!-- SEO-optimized tags for discoverability -->
+    <PackageTags>azure;table;storage;azure-storage;azure-table-storage;table-storage;nosql;azure-tables;cloud-storage;microsoft-azure;azure-sdk;dotnet;netstandard;entity;crud;odata;partition-key;row-key;batch-transaction;azure-cloud;cosmosdb-table;table-api;data-storage</PackageTags>
+
+    <!-- Documentation -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+
+    <!-- Release Notes -->
+    <PackageReleaseNotes>
+Initial release v1.0.0:
+- Full CRUD operations (Insert, Query, Update, Delete, Upsert)
+- Type-safe generic entity support with ITableEntity
+- Flexible OData filter queries for complex scenarios
+- Partition key queries for optimized performance
+- Batch transactions (up to 100 operations per batch)
+- Optimistic concurrency with ETag support
+- Table management operations (Create, Delete, List, Exists)
+- Comprehensive error handling with AzureStorageException
+- Async/await pattern throughout
+- Extensive XML documentation with examples
+- Multi-framework support (.NET Standard 2.0+, .NET 7-9)
+    </PackageReleaseNotes>
+
+    <!-- Repository and Project URLs -->
+    <RepositoryUrl>https://github.com/Clifftech123/AzureStroage.Standard</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>https://github.com/Clifftech123/AzureStroage.Standard</PackageProjectUrl>
+
+    <!-- Source Link for debugging support -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+
+    <!-- Central Package Management -->
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
+
+  <!-- Include README in package -->
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <!-- Package References from Central Package Management -->
+  <ItemGroup>
+    <PackageReference Include="Azure.Data.Tables" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
+  </ItemGroup>
+
+  <!-- Project References -->
+  <ItemGroup>
+    <ProjectReference Include="..\AzureStorage.Standard.Core\AzureStorage.Standard.Core.csproj" />
+  </ItemGroup>
 
 </Project>
