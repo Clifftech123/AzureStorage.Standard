@@ -11,8 +11,7 @@
 
     <!-- Package Identity -->
     <PackageId>AzureStorage.Standard.Core</PackageId>
-    <Version>1.0.0</Version>
-    <PackageVersion>1.0.0</PackageVersion>
+    <!-- Version is automatically determined by MinVer from git tags -->
 
     <!-- Package Metadata for NuGet -->
     <Title>Azure Storage Core - Shared Models and Abstractions</Title>
@@ -49,8 +48,7 @@ Initial release v1.0.0:
     </PackageReleaseNotes>
 
     <!-- Symbols and Source -->
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <IncludeSymbols>false</IncludeSymbols>
     <IncludeSource>false</IncludeSource>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
 
@@ -63,11 +61,19 @@ Initial release v1.0.0:
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <Deterministic>true</Deterministic>
     <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
+
+    <!-- Suppress NuGet warning about no dependencies (this is a core library with types only) -->
+    <!-- Suppress XML documentation warnings (CS1591: missing XML comment, CS1574: cref not found) -->
+    <NoWarn>$(NoWarn);NU5128;NU5017;CS1591;CS1574</NoWarn>
   </PropertyGroup>
 
   <!-- Release Configuration -->
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <!-- Only generate package in CI, not local builds -->
+    <GeneratePackageOnBuild Condition="'$(CI)' == 'true'">true</GeneratePackageOnBuild>
+    <!-- Suppress NuGet pack warnings and skip package analysis -->
+    <NoWarn>$(NoWarn);NU5128;NU5017</NoWarn>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
     <Optimize>true</Optimize>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
@@ -80,6 +86,7 @@ Initial release v1.0.0:
 
   <!-- Package References -->
   <ItemGroup>
+    <PackageReference Include="MinVer" PrivateAssets="All" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
   </ItemGroup>
 

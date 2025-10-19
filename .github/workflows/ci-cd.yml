@@ -1,0 +1,202 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ develop, main ]
+    tags:
+      - 'v*'
+  pull_request:
+    branches: [ develop, main ]
+
+env:
+  DOTNET_VERSION: '9.0.x'
+  CONFIGURATION: Release
+  AZURITE_VERSION: 'latest'
+  DOTNET_NOLOGO: true
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  MINVERBUILDMETADATA: build.${{ github.run_number }}
+
+jobs:
+  build-and-test:
+    name: Build and Test
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Full history for versioning
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build library projects
+      run: |
+        dotnet build AzureStorage.Standard.Core/AzureStorage.Standard.Core.csproj --configuration ${{ env.CONFIGURATION }} --no-restore
+        dotnet build AzureStorage.Standard.Blobs/AzureStorage.Standard.Blobs.csproj --configuration ${{ env.CONFIGURATION }} --no-restore
+        dotnet build AzureStorage.Standard.Queues/AzureStorage.Standard.Queues.csproj --configuration ${{ env.CONFIGURATION }} --no-restore
+        dotnet build AzureStorage.Standard.Tables/AzureStorage.Standard.Tables.csproj --configuration ${{ env.CONFIGURATION }} --no-restore
+        dotnet build AzureStorage.Standard.Files/AzureStorage.Standard.Files.csproj --configuration ${{ env.CONFIGURATION }} --no-restore
+        dotnet build AzureStorage.Standard.Tests/AzureStroage.Standard.Tests.csproj --configuration ${{ env.CONFIGURATION }} --no-restore
+
+    - name: Run unit tests
+      run: dotnet test --configuration ${{ env.CONFIGURATION }} --no-build --filter "Category=Unit" --verbosity normal --logger "trx;LogFileName=unit-test-results.trx"
+
+    - name: Setup Azurite (Azure Storage Emulator)
+      run: |
+        npm install -g azurite
+        mkdir -p $HOME/azurite
+        azurite --silent --location $HOME/azurite &
+        sleep 5
+        echo "Azurite started successfully"
+
+    - name: Run integration tests
+      run: dotnet test --configuration ${{ env.CONFIGURATION }} --no-build --filter "Category=Integration" --verbosity normal --logger "trx;LogFileName=integration-test-results.trx"
+      env:
+        AZURE_STORAGE_CONNECTION_STRING: "UseDevelopmentStorage=true;DevelopmentStorageProxyUri=http://127.0.0.1"
+
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results
+        path: '**/TestResults/*.trx'
+
+    - name: Pack NuGet packages
+      if: github.event_name == 'push' && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
+      run: |
+        dotnet pack AzureStorage.Standard.Core/AzureStorage.Standard.Core.csproj --configuration ${{ env.CONFIGURATION }} --no-build --output ./artifacts
+        dotnet pack AzureStorage.Standard.Blobs/AzureStorage.Standard.Blobs.csproj --configuration ${{ env.CONFIGURATION }} --no-build --output ./artifacts
+        dotnet pack AzureStorage.Standard.Queues/AzureStorage.Standard.Queues.csproj --configuration ${{ env.CONFIGURATION }} --no-build --output ./artifacts
+        dotnet pack AzureStorage.Standard.Tables/AzureStorage.Standard.Tables.csproj --configuration ${{ env.CONFIGURATION }} --no-build --output ./artifacts
+        dotnet pack AzureStorage.Standard.Files/AzureStorage.Standard.Files.csproj --configuration ${{ env.CONFIGURATION }} --no-build --output ./artifacts
+
+    - name: Upload NuGet artifacts
+      if: github.event_name == 'push' && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
+      uses: actions/upload-artifact@v4
+      with:
+        name: nuget-packages
+        path: ./artifacts/*.nupkg
+
+  publish-develop:
+    name: Publish to GitHub Packages (Develop)
+    needs: build-and-test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+
+    steps:
+    - name: Download NuGet artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: nuget-packages
+        path: ./artifacts
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Publish to GitHub Packages
+      run: |
+        dotnet nuget add source --username ${{ github.repository_owner }} \
+          --password ${{ secrets.GITHUB_TOKEN }} \
+          --store-password-in-clear-text \
+          --name github "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json"
+
+        dotnet nuget push "./artifacts/*.nupkg" \
+          --source "github" \
+          --api-key ${{ secrets.GITHUB_TOKEN }} \
+          --skip-duplicate
+
+  publish-release:
+    name: Publish to NuGet.org (Release)
+    needs: build-and-test
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Download NuGet artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: nuget-packages
+        path: ./artifacts
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Publish to NuGet.org
+      run: |
+        dotnet nuget push "./artifacts/*.nupkg" \
+          --source https://api.nuget.org/v3/index.json \
+          --api-key ${{ secrets.NUGET_API_KEY }} \
+          --skip-duplicate
+      env:
+        NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+
+  create-release:
+    name: Create GitHub Release
+    needs: publish-release
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Download NuGet artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: nuget-packages
+        path: ./artifacts
+
+    - name: Extract version from tag
+      id: version
+      run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        name: Release ${{ steps.version.outputs.VERSION }}
+        body: |
+          ## AzureStorage.Standard v${{ steps.version.outputs.VERSION }}
+
+          ### NuGet Packages Published
+
+          - ✅ AzureStorage.Standard.Blobs
+          - ✅ AzureStorage.Standard.Queues
+          - ✅ AzureStorage.Standard.Tables
+          - ✅ AzureStorage.Standard.Files
+          - ✅ AzureStorage.Standard.Core
+
+          ### Installation
+
+          ```bash
+          # Install individual packages as needed
+          dotnet add package AzureStorage.Standard.Blobs
+          dotnet add package AzureStorage.Standard.Queues
+          dotnet add package AzureStorage.Standard.Tables
+          dotnet add package AzureStorage.Standard.Files
+          ```
+
+          The Core package is automatically installed as a dependency.
+
+          ### What's Changed
+
+          See [CHANGELOG.md](CHANGELOG.md) for detailed release notes.
+        files: ./artifacts/*.nupkg
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
