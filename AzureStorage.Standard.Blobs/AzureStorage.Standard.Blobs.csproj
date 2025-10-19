@@ -105,10 +105,10 @@ Initial release v1.0.0:
     </ProjectReference>
   </ItemGroup>
 
-  <!-- Include README in package (uncomment when README.md is created) -->
-  <!-- <ItemGroup>
+  <!-- Include README in package -->
+  <ItemGroup>
     <None Include="README.md" Pack="true" PackagePath="\" />
-  </ItemGroup> -->
+  </ItemGroup>
 
   <!-- Include Icon in package (uncomment when icon is added) -->
   <!-- <ItemGroup>

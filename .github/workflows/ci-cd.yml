@@ -35,8 +35,14 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
 
-    - name: Build solution
-      run: dotnet build --configuration ${{ env.CONFIGURATION }} --no-restore
+    - name: Build library projects
+      run: |
+        dotnet build AzureStorage.Standard.Core/AzureStorage.Standard.Core.csproj --configuration ${{ env.CONFIGURATION }} --no-restore
+        dotnet build AzureStorage.Standard.Blobs/AzureStorage.Standard.Blobs.csproj --configuration ${{ env.CONFIGURATION }} --no-restore
+        dotnet build AzureStorage.Standard.Queues/AzureStorage.Standard.Queues.csproj --configuration ${{ env.CONFIGURATION }} --no-restore
+        dotnet build AzureStorage.Standard.Tables/AzureStorage.Standard.Tables.csproj --configuration ${{ env.CONFIGURATION }} --no-restore
+        dotnet build AzureStorage.Standard.Files/AzureStorage.Standard.Files.csproj --configuration ${{ env.CONFIGURATION }} --no-restore
+        dotnet build AzureStorage.Standard.Tests/AzureStroage.Standard.Tests.csproj --configuration ${{ env.CONFIGURATION }} --no-restore
 
     - name: Run unit tests
       run: dotnet test --configuration ${{ env.CONFIGURATION }} --no-build --filter "Category=Unit" --verbosity normal --logger "trx;LogFileName=unit-test-results.trx"
@@ -63,7 +69,12 @@ jobs:
 
     - name: Pack NuGet packages
       if: github.event_name == 'push' && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
-      run: dotnet pack --configuration ${{ env.CONFIGURATION }} --no-build --output ./artifacts
+      run: |
+        dotnet pack AzureStorage.Standard.Core/AzureStorage.Standard.Core.csproj --configuration ${{ env.CONFIGURATION }} --no-build --output ./artifacts
+        dotnet pack AzureStorage.Standard.Blobs/AzureStorage.Standard.Blobs.csproj --configuration ${{ env.CONFIGURATION }} --no-build --output ./artifacts
+        dotnet pack AzureStorage.Standard.Queues/AzureStorage.Standard.Queues.csproj --configuration ${{ env.CONFIGURATION }} --no-build --output ./artifacts
+        dotnet pack AzureStorage.Standard.Tables/AzureStorage.Standard.Tables.csproj --configuration ${{ env.CONFIGURATION }} --no-build --output ./artifacts
+        dotnet pack AzureStorage.Standard.Files/AzureStorage.Standard.Files.csproj --configuration ${{ env.CONFIGURATION }} --no-build --output ./artifacts
 
     - name: Upload NuGet artifacts
       if: github.event_name == 'push' && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
