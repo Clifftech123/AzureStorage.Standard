@@ -15,6 +15,7 @@ env:
   DOTNET_NOLOGO: true
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   MINVERBUILDMETADATA: build.${{ github.run_number }}
+  MINVERVERBOSITY: diagnostic
 
 jobs:
   build-and-test:
@@ -26,12 +27,18 @@ jobs:
       uses: actions/checkout@v5
       with:
         fetch-depth: 0  # Full history for versioning
-        fetch-tags: true  # Ensure tags are fetched for MinVer
+        ref: ${{ github.ref }}  # Checkout the exact ref (tag or branch)
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Verify Git tags for MinVer
+      run: |
+        git fetch --tags --force
+        git describe --tags
+        git tag --points-at HEAD
 
     - name: Restore dependencies
       run: dotnet restore
