@@ -89,6 +89,11 @@ Initial release v1.0.0:
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
+  <!--  MinVer Configuration -->
+  <PropertyGroup>
+    <MinVerTagPrefix>v</MinVerTagPrefix>
+  </PropertyGroup>
+
   <!-- Package References from Central Package Management -->
   <ItemGroup>
    <PackageReference Include="Azure.Storage.Blobs" />

@@ -86,8 +86,15 @@ Initial release v1.0.0:
 
   <!-- Package References -->
   <ItemGroup>
-    <PackageReference Include="MinVer" PrivateAssets="All" />
+    <PackageReference Include="MinVer" PrivateAssets="All">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
   </ItemGroup>
+
+  <!-- MinVer Configuration -->
+  <PropertyGroup>
+    <MinVerTagPrefix>v</MinVerTagPrefix>
+  </PropertyGroup>
 
 </Project>
