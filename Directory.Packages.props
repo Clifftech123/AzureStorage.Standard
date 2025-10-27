@@ -21,7 +21,7 @@
     <PackageVersion Include="Azure.Identity" Version="1.17.0" />
 
     <!-- Polly for retry policies -->
-    <PackageVersion Include="Polly" Version="8.5.0" />
+    <PackageVersion Include="Polly" Version="8.6.4" />
 
     <!-- Source Link for debugging -->
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0" />
