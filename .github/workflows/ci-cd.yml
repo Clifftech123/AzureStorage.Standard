@@ -127,7 +127,7 @@ jobs:
   publish-release:
     name: Publish to NuGet.org (Release)
     needs: build-and-test
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
 
     steps:
