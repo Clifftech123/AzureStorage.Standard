@@ -70,7 +70,7 @@ jobs:
 
     - name: Upload test results
       if: always()
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         name: test-results
         path: '**/TestResults/*.trx'
@@ -86,7 +86,7 @@ jobs:
 
     - name: Upload NuGet artifacts
       if: github.event_name == 'push' && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         name: nuget-packages
         path: ./artifacts/*.nupkg
