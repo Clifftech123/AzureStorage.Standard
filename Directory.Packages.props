@@ -24,10 +24,10 @@
     <PackageVersion Include="Polly" Version="8.6.5" />
 
     <!-- Source Link for debugging -->
-    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="10.0.102" />
 
     <!-- Automatic versioning from git tags -->
-    <PackageVersion Include="MinVer" Version="6.0.0" />
+    <PackageVersion Include="MinVer" Version="7.0.0" />
 
     <!-- Web / OpenAPI -->
   <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="9.0.11" />
